@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 15:14:43 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/08 15:48:55 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/08 16:05:50 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,5 @@ char	*get_next_line(int fd)
 		tmp = stock;
 		stock = ft_strjoin(tmp, buff);
 	}
+	return (stock);
 }
