@@ -5,49 +5,75 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/07 15:14:43 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/08 16:05:50 by rabouzia         ###   ########.fr       */
+/*   Created: 2023/12/12 11:38:19 by rabouzia          #+#    #+#             */
+/*   Updated: 2023/12/12 17:01:43 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-int	not_a_nl(char *str, char c)
+int	ft_strlen(char const *str)
 {
 	int	i;
 
 	i = 0;
-	if (!str)
-		return (NULL);
 	while (str[i])
-	{
-		if (str[i] == c)
-			return (0);
 		i++;
+	return (i);
+}
+
+char	*ft_strcat(char *dest, char *src)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (dest[i] != '\0')
+		i++;
+	j = 0;
+	while (src[j] != '\n' && src[j] != '\0')
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
 	}
-	return (1);
+	dest[i] = '\0';
+	return (dest);
 }
 
 char	*get_next_line(int fd)
 {
-	char *buff;
-	static char *stock;
-	int reader;
-	char *tmp;
+	static char	*stockage;
+	char		*res;
+	int			lu;
+	char		buff[BUFFER_SIZE];
 
-	if (BUFFER_SIZE < 1 || fd > 1024 || fd < 0)
-		return (NULL);
-	buff = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!buff)
-		return (NULL);
-	reader = 1;
-	while (not_a_nl(stock, '\n') == 1 && reader > 0)
+    res = malloc(BUFFER_SIZE * 2 + 1);
+	lu = 0;
+	while ()
 	{
-		reader = read(fd, buff, BUFFER_SIZE);
-		if (reader == -1)
+		lu = read(fd, buff, BUFFER_SIZE);
+		if (lu == -1)
 			return (NULL);
-		tmp = stock;
-		stock = ft_strjoin(tmp, buff);
+		buff[lu] = '\0';
+		res = ft_strcat(res, buff);
+        stockage = ft_substr(buff, '\n')
 	}
-	return (stock);
+	return (res);
+}
+
+int	main(void)
+{
+	int fd;
+	if ((fd = open("xaxa", O_RDONLY)) < 0)
+	{
+		printf("open failed");
+		return (0);
+	}
+	printf("fd = %d\n", fd);
+	printf("%s", get_next_line(fd));
 }
