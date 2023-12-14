@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 10:37:24 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/13 16:35:39 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/14 12:40:56 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 3
 # endif
 
 char	*get_next_line(int fd);

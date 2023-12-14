@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:38:19 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/13 17:27:02 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:50:18 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,36 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strdup(char *src)
+{
+	int		i;
+	char	*r;
+
+	r = (char *)malloc(sizeof(char) * (ft_strlen(src) + 1));
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (src[i])
+	{
+		r[i] = src[i];
+		i++;
+	}
+	r[i] = 0;
+	return (r);
+}
+
+char	*for_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		len1;
-	int		len2;
 	char	*str;
 
-	if (!s1 && !s2)
-		return (NULL);
 	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (NULL);
+	str = (char *)malloc(sizeof(char) * (len1 + ft_strlen(s2) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -48,60 +66,35 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = -1;
 	while (s2[++i])
 	{
-		if (s2[i] == '\n')
-			break ;
 		str[len1] = s2[i];
 		len1++;
+		if (s2[i] == '\n')
+			break ;
 	}
 	str[len1] = '\0';
-	return (str);
+	return (free(s1), str);
 }
 
-char	*ft_substr(char *s)
+int is_a_nl(char *str)
 {
-	int		i;
-	int		j;
-	char	*str;
-
-	str = malloc(ft_strlen(s) + 1);
-	i = 0;
-	j = 0;
-	while (s[i++])
-	{
-		if (s[i] == '\n')
-		{
-			i++;
-			while (s[i])
-			{
-				str[j] = s[i];
-				i++;
-				j++;
-			}
-		}
-	}
-	str[j] = 0;
-	free(s);
-	return (str);
-}
-
-int	nl(char *s)
-{
-	int	i;
+	int i;
 
 	i = 0;
-	while (s[i])
+	while(str[i])
 	{
-		if (s[i] == '\n')
-			return (0);
+		if (str[i] == '\n')
+			return(0);
 		i++;
 	}
-	return (1);
+	return 1;
 }
 
 int	ft_strchr(char *str, char c)
 {
 	int	i;
 
+	if (str == NULL)
+		return (0);
 	i = 0;
 	while (i < ft_strlen(str) + 1)
 	{
@@ -114,29 +107,26 @@ int	ft_strchr(char *str, char c)
 
 char	*get_next_line(int fd)
 {
-	static char	*res;
+	char		*res;
 	int			lu;
-	char		buff[BUFFER_SIZE + 1];
+	static char	buff[BUFFER_SIZE + 1] = {};
 
-	// char	*stockage;
 	if (BUFFER_SIZE < 1 || fd > 1024 || fd < 0)
 		return (NULL);
-	//  d malloc(sizeof(char) * BUFFER_SIZE + 1);
 	lu = 1;
-	while (lu > 0 && (ft_strchr(buff, '\n') == 0))
+	res = NULL;
+	if (buff[0]== '\n')
+		return (NULL);
+	while (lu > 0 && (ft_strchr(res, '\n') == 0))
 	{
-		// printf("buff: %s\n", buff);
-		// printf("res: %s\n", res);
-		// printf("stockage: %s\n", stockage);
 		lu = read(fd, buff, BUFFER_SIZE);
 		if (lu == -1)
 			return (NULL);
 		buff[lu] = '\0';
-		// stockage = ft_substr(buff);
-		res = ft_strjoin(res, buff);
+		res = for_strjoin(res, buff);
 	}
-	// printf("res: %s\n", res);
-	return (free(res), res);
+	buff[0] = '\0';
+	return (res);
 }
 
 // int	main(void)
@@ -148,5 +138,10 @@ char	*get_next_line(int fd)
 // 		return (0);
 // 	}
 // 	int i = 5;
+// 	printf("gnl: %s\n", get_next_line(fd));
+// 	printf("gnl: %s\n", get_next_line(fd));
+// 	printf("gnl: %s\n", get_next_line(fd));
+// 	printf("gnl: %s\n", get_next_line(fd));
+// 	printf("gnl: %s\n", get_next_line(fd));
 // 	printf("gnl: %s\n", get_next_line(fd));
 // }
