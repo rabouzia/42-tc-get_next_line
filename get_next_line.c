@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:38:19 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/14 14:50:18 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/14 18:15:28 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,18 @@ char	*for_strjoin(char *s1, char *s2)
 	return (free(s1), str);
 }
 
-int is_a_nl(char *str)
+int	is_a_nl(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] == '\n')
-			return(0);
+			return (0);
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
 int	ft_strchr(char *str, char c)
@@ -115,33 +115,47 @@ char	*get_next_line(int fd)
 		return (NULL);
 	lu = 1;
 	res = NULL;
-	if (buff[0]== '\n')
-		return (NULL);
 	while (lu > 0 && (ft_strchr(res, '\n') == 0))
 	{
 		lu = read(fd, buff, BUFFER_SIZE);
-		if (lu == -1)
-			return (NULL);
+		if (lu <= 0)
+			break ;
 		buff[lu] = '\0';
 		res = for_strjoin(res, buff);
 	}
-	buff[0] = '\0';
+//	buff[0] = '\0';
+	if (lu <= 0 && !res)
+		return (NULL);
 	return (res);
 }
 
 // int	main(void)
 // {
 // 	int fd;
+// 	char *str;
 // 	if ((fd = open("xaxa", O_RDONLY)) < 0)
 // 	{
 // 		printf("open failed");
 // 		return (0);
 // 	}
-// 	int i = 5;
-// 	printf("gnl: %s\n", get_next_line(fd));
-// 	printf("gnl: %s\n", get_next_line(fd));
-// 	printf("gnl: %s\n", get_next_line(fd));
-// 	printf("gnl: %s\n", get_next_line(fd));
-// 	printf("gnl: %s\n", get_next_line(fd));
-// 	printf("gnl: %s\n", get_next_line(fd));
+// 	int i = 15;
+// 	while (i--)
+// 		printf("gnl:%s\n", get_next_line(fd));
 // }
+//
+int	main(int ac, char **av)
+{
+	int		fd;
+	char	*line;
+
+	(void)ac;
+	if ((fd = open(av[1], O_RDONLY)) == -1)
+		return (1);
+	while ((line = get_next_line(fd)))
+	{
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+	return (0);
+}
