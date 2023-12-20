@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:38:19 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/18 15:55:09 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:40:12 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,51 @@ void	rm_back(char *str)
 	str[j] = '\0';
 }
 
-char	*get_next_line(int fd)
+char	*gnl(char **buff, int fd)
 {
-	char		*res;
-	int			lu;
-	static char	buff[BUFFER_SIZE + 1] = {};
+	char	*res;
+	int		lu;
 
-	if (BUFFER_SIZE < 1 || fd > 1024 || fd < 0)
-		return (NULL);
 	lu = 1;
 	res = NULL;
-	if (ft_memchr(buff, '\n') != 0)
+	if (ft_memchr(buff[fd], '\n') != 0)
 	{
-		if (ft_strlen(ft_memchr(buff, '\n') + 1) > 0)
-			res = ft_strdup(ft_memchr(buff, '\n') + 1);
-		rm_back(buff);
+		if (ft_strlen(ft_memchr(buff[fd], '\n') + 1) > 0)
+			res = ft_strdup(ft_memchr(buff[fd], '\n') + 1);
+		rm_back(buff[fd]);
 	}
 	while (lu > 0 && (ft_strchr(res, '\n') == 0))
 	{
-		lu = read(fd, buff, BUFFER_SIZE);
+		lu = read(fd, buff[fd], BUFFER_SIZE);
 		if (lu <= 0)
 			break ;
-		buff[lu] = '\0';
-		res = for_strjoin(res, buff);
+		buff[fd][lu] = '\0';
+		res = for_strjoin(res, buff[fd]);
 	}
 	if (lu <= 0 && !res)
 		return (NULL);
 	return (res);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buff[FD_MAX] = {0};
+	char		*check;
+
+	if (BUFFER_SIZE < 1 || fd > FD_MAX - 1 || fd < 0)
+		return (NULL);
+	if (buff[fd] == NULL)
+	{
+		buff[fd] = malloc(BUFFER_SIZE + 1);
+		buff[fd][0] = '\0';
+	}
+	if (!buff[fd])
+		return (NULL);
+	check = gnl(buff, fd);
+	if (!check)
+	{
+		free(buff[fd]);
+		buff[fd] = NULL;
+	}
+	return (check);
 }

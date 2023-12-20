@@ -6,7 +6,7 @@
 /*   By: rabouzia <rabouzia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 17:54:36 by rabouzia          #+#    #+#             */
-/*   Updated: 2023/12/18 15:47:50 by rabouzia         ###   ########.fr       */
+/*   Updated: 2023/12/19 16:25:28 by rabouzia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,12 @@ char	*for_strjoin(char *s1, char *s2)
 
 int	ft_strchr(char *str, char c)
 {
-	int i;
-	int j;
+	int	i;
 
 	if (str == NULL)
 		return (0);
 	i = 0;
-	j = ft_strlen(str);
-	while (i < j + 1)
+	while (str[i])
 	{
 		if (str[i] == c)
 			return (1);
